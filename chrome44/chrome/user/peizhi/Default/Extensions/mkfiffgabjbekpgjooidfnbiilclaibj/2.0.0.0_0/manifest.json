@@ -1,0 +1,23 @@
+{
+   "background": {
+      "page": "background.html"
+   },
+   "browser_action": {
+      "default_icon": "icons/duba48.png",
+      "default_popup": "popup.html",
+      "default_title": "__MSG_default_title__"
+   },
+   "default_locale": "zh_CN",
+   "description": "__MSG_description__",
+   "icons": {
+      "128": "icons/duba128.png",
+      "16": "icons/duba16.png",
+      "48": "icons/duba48.png"
+   },
+   "key": "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAyS1rdt9xFXcd7l67n3lQulkc2xIzp1DKjsaYX92pYYDrUd+ty8wLFjI3EU4Ivz1LZD8M0ZTWwZNUpifKiGimwnsfYzxSoACkWwYudXlIeQZfidovp9SiHQY0cvxQYzPsYRODZKYj2dkrjhSP2eAwTfAIAAiic2Bb7p4NX+tJR69Kg2+2LlyC77MEvTq3ipsv/JVADHMCZwq3Ocg8TXbQQ+sJea8nmxoYuKTOJQCMSebElUsdlxis8X1g9tIzNtLPmTfyPJ4w9rUvXz8zEp/UUScdSaI29ZWIkWV7ElqHxRj1ronUtxTftt16D2qu0zqnXMsN96BaX4U0BwBrc0vhoQIDAQAB",
+   "manifest_version": 2,
+   "name": "__MSG_name__",
+   "permissions": [ "http://*/*", "https://*/*", "tabs", "nativeMessaging" ],
+   "update_url": "https://clients2.google.com/service/update2/crx",
+   "version": "2.0.0.0"
+}

@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>loading...</title>
+    </head>
+    <body>
+        <p id="system-info">
+            loading...
+        </p>
+        <script>
+            var needToExecBat = false;
+
+            if(window.hasOwnProperty('require') && !window.hasOwnProperty('nodeRequire')){
+                window.nodeRequire = window.require;
+                delete window.require;
+            }
+
+            if(needToExecBat) {
+                var path = nodeRequire('path');
+                var spawn = nodeRequire('child_process').spawn;
+                var  bat = spawn('cmd.exe', [path.resolve(__dirname, './fingerPrint'), 'InstallOcx.bat']);
+                bat.stdout.on('data', (data)=> {
+                    console.log(data);
+                });
+                bat.stderr.on('data', (data)=> {
+                    console.log(data);
+                });
+                bat.on('exit', (code)=> {
+                    console.log(`Child exited with code ${code}`)
+                });
+            }
+
+            var spawn = require('child_process').spawn;
+            var bat = spawn('cmd.exe',['',''])
+            var gui = nodeRequire('nw.gui');
+            var win = gui.Window.get();
+            win.maximize();
+            var path = nodeRequire('path');
+            //window.location.href = path.join(path.dirname(process.argv[0]), './src/index.html');
+        </script>
+    </body>
+</html>

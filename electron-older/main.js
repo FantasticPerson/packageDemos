@@ -2,7 +2,23 @@ var app = require('app');
 var BrowserWindow = require('browser-window');
 var mainWindow = null;
 var globalShortcut = require('global-shortcut');
+var needToExecBat = false;
+const path = require('path');
 require('crash-reporter').start();
+
+if(needToExecBat) {
+  const {spawn} = require('child_process');
+  const bat = spawn('cmd.exe', [path.resolve(__dirname, './fingerPrint'), 'InstallOcx.bat']);
+  bat.stdout.on('data', (data)=> {
+    console.log(data);
+  });
+  bat.stderr.on('data', (data)=> {
+    console.log(data);
+  });
+  bat.on('exit', (code)=> {
+    console.log(`Child exited with code ${code}`)
+  });
+}
 
 app.on('window-all-closed', function() {
   if (process.platform != 'darwin') {
@@ -15,10 +31,6 @@ app.commandLine.appendSwitch('disable-http-cache');
 
 app.on('ready', function() {
   mainWindow = new BrowserWindow({title: '中威政务协同', width: 800, height: 600, 'web-preferences': {'plugins': true},icon: 'file://' + __dirname + '/logo.ico'});
-  //mainWindow.loadUrl('file://' + __dirname + '/index.html');
-  //mainWindow.loadUrl('http://192.168.5.103:3002/trueWorkFlow/');
-  //mainWindow.loadUrl('http://192.168.5.103:3002/trueOA/');
-  //mainWindow.loadUrl('http://192.168.5.103:3002/trueOA/portalHome_portal.do');
   mainWindow.loadUrl('http://192.168.0.136:8881/TrueCMS/');
 
   mainWindow.maximize();

@@ -1,0 +1,1 @@
+CreateObject("shell.application").ShellExecute "Chrome.exe", "-set"

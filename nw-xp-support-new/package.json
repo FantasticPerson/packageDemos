@@ -1,0 +1,24 @@
+{
+  "name": "TrueCms",
+  "//": "支持相对路径,url,绝对路径,或者直接是一个文件名,0.13不支持相对路径",
+  "main": "index.html",
+  "--node-remote":"设置node环境",
+  "node-remote": [
+    "http://192.168.0.136:8881",
+    "http://10.18.209.119:8881"
+  ],
+  "version": "0.0.1",
+  "window": {
+    "toolbar": true,
+    "fullscreen": false
+  },
+  "--chromium-args": "--ppapi-flash-path=PepperFlash/pepflashplayer.dll",
+  "scripts": {
+    "start": "./nwjs/nwjs.app/Contents/MacOS/nwjs ."
+  },
+  "dependencies": {
+  },
+  "devDependencies": {
+    "nw-builder": "^3.1.2"
+  }
+}
