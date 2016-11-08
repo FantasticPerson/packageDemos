@@ -1,10 +1,59 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns="http://www.w3.org/1999/html">
 <head>
     <meta charset="UTF-8">
     <title>封装包生成器</title>
 </head>
 <body>
-
+    <div class="platform">
+        <h5>输入应用名称：</h5>
+        <input type="text" id="input_text_1"/>
+        <h5>选择平台：</h5>
+        <select name="select" id="select_k1" class="xla_k">
+            <option value="win7+">win7+</option>
+            <option value="xp">xp</option>
+        </select>
+        <h5>插件格式：</h5>
+        <select name="select" id="select_k2" class="xla_k">
+            <option value="ppapi">ppapi</option>
+            <option value="npapi">npapi</option>
+        </select>
+        <h5>选择插件(部分插件需要手动安装)：</h5>
+        <input type="checkbox" id="plugin_1" class="input_text">flash</input>
+        <input type="checkbox" id="plugin_2" class="input_text">fingerPrint</input>
+    </div>
+    <div class="generate">
+        <button onclick="generate()">生成</button>
+    </div>
+    <script>
+        function getPlatform(){
+            var select_k1 = document.getElementById('select_k1');
+            return select_k1.selectedIndex;
+        }
+        function getPluginType(){
+            var select_k2 = document.getElementById('select_k2');
+            return select_k2.selectedIndex;
+        }
+        function getPluginList(){
+            var list = [];
+            for(var i=0;i<2;i++){
+                var nodeItem = document.getElementById('plugin_'+(i+1));
+                if(nodeItem.checked){
+                    list.push(i);
+                }
+            }
+            return list;
+        }
+        function getAppName(){
+            var node = document.getElementById('input_text_1');
+            return node.value;
+        }
+        function generate(){
+            var platformIndex = getPlatform();
+            var pluginType = getPluginType();
+            var pluginList = getPluginList();
+            var appName = getAppName();
+        }
+    </script>
 </body>
 </html>
