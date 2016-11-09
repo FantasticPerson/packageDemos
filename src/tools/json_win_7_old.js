@@ -67,5 +67,5 @@ exports.winOld = function generateJson() {
     returnJson += "app.commandLine.appendSwitch('--enable-npapi');\r\n";
 
     return returnJson;
-}
+};
 
