@@ -3,28 +3,68 @@
  */
 var fs = require('fs');
 var path = require('path');
+var del = require('del');
+var rootpath = path.resolve(__dirname,'../../');
+var promiseNum = 0;
 
-exports.cleanPath = function cleanPath(path){
-    var isExist = fs.existsSync(outputPath);
+exports.cleanPath = function cleanPath(path2,cb){
+    var mvSrc = path.resolve(rootpath,'./temp/resources/electron.asar');
+    var mvDest = path.resolve(rootpath,'./temp/resources/electron.zip');
+    var promiseArray = [];
+    function renamesPromise(){
+        return new Promise((resolve)=>{
+            if(fs.existsSync(mvDest)) {
+                resolve();
+            }
+            fs.rename(mvSrc, mvDest,function(){
+                resolve();
+            })
+        });
+    }
+    promiseArray[0] = renamesPromise();
+    function promiseRemove(path,isDir){
+        return new Promise(function(resolve,reject){
+            if(!fs.existsSync(path)){
+                resolve();
+            }
+            var func = isDir ? fs.rmdirSync : fs.unlinkSync;
+            func(path);
+            resolve();
+        })
+    }
+    var outputpath = path.resolve(rootpath,'./'+path2);
+    var isExist = fs.existsSync(outputpath);
     if(!isExist) {
-        console.log("dirctory or file is not exist");
+        cb();
         return;
     }
-    fs.readdir(outputPath,function(err,files){
+    fs.readdir(outputpath,function(err,files){
         var rmDir = function(files,dir){
             files.map(function(nameItem){
                 var subPath = path.resolve(dir,'./'+nameItem);
                 if(fs.statSync(subPath).isDirectory()){
                     var subFiles = fs.readdirSync(subPath);
+                    promiseNum++;
                     rmDir(subFiles,subPath);
                 } else {
-                    fs.unlinkSync(subPath);
+                    promiseArray[promiseArray.length] = promiseRemove(subPath,false)
                 }
             });
-            fs.rmdirSync(dir);
+            promiseArray[promiseArray.length] = promiseRemove(dir,true);
+            promiseNum--;
+            if(promiseNum == 0){
+                Promise.all(promiseArray)
+                    .then(function () {
+                        cb();
+                    })
+                    .catch(function (err){
+                        console.log(err);
+                    })
+            }
         };
-        if(files.length > 0){
-            rmDir(files,outputPath);
+        if(files.length >= 0){
+            promiseNum++;
+            rmDir(files,outputpath);
         }
-    })
+    });
 };

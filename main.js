@@ -8,7 +8,9 @@ const url = require('url');
 let mainWindow;
 
 function createWindow() {
-    const {width, height} = electron.screen.getPrimaryDisplay().workAreaSize;
+    // const {width, height} = electron.screen.getPrimaryDisplay().workAreaSize;
+    var width = 800;
+    var height = 600;
     mainWindow = new BrowserWindow({
         width, height, webPreferences: {
             nodeIntegration: true,
@@ -16,7 +18,7 @@ function createWindow() {
         }
     });
     mainWindow.loadURL(url.format({
-        pathname: path.join(__dirname, 'index.html'),
+        pathname: path.join(__dirname, 'src/index.html'),
         protocol: 'file:',
         slashes: true
     }))

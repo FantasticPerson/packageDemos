@@ -2,7 +2,7 @@
  * Created by dandan.wu on 2016/11/8.
  */
 
-exports.winOld = function generateJson() {
+exports.winOld = function generateJson(needRefreshKey=false,needFlash=false,url="") {
     var returnJson = "/**\r\n";
     returnJson += " *Created by packageMaker jsonWin7Old\r\n";
     returnJson += (" *" + Date() + "\r\n");

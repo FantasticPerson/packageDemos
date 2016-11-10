@@ -7,33 +7,37 @@ var path = require('path');
 
 
 var outputPath = path.resolve(__dirname,"./output");
-var originPath = path.resolve(__dirname,"./electron-lastest/True.test-win32-ia32");
+var originPath = path.resolve(__dirname,"./packages/electron-lastest/True.test-win32-ia32");
 
 var copyFolder = require('stream-copy-dir');
 var handlebars = require('handlebars');
 
 function copyDir(originPath,outputPath) {
-    copyFolder(originPath, outputPath)
-        .once('error', console.error)
-        .once('finish', function () {
-            console.log('copied and modified without errors')
-        })
+    return new Promise(function (resolve,reject) {
+        copyFolder(originPath, outputPath)
+            .once('error', function (err) {
+                console.log('copy failed');
+                reject(err);
+            })
+            .once('finish', function () {
+                console.log('copied and modified without errors');
+                resolve("success");
+            })
+    });
 }
 
+var taskArray = [];
+
 function copyFile(originPath,outputPath){
-    console.log(originPath);
-    console.log(outputPath);
     var files = fs.readdirSync(originPath);
     if(files && files.hasOwnProperty('length') && files.length > 0){
-        copyDir(originPath,outputPath);
+        taskArray.push(copyDir(originPath,outputPath));
         var copyFiles = function(files,originPath){
-            copyDir(originPath,outputPath);
+            taskArray.push(copyDir(originPath,outputPath));
             files.map((nameItem)=>{
                 var srcPath = path.resolve(outputPath,'./'+nameItem);
                 var subPath = path.resolve(originPath,'./'+nameItem);
                 if(fs.statSync(subPath).isDirectory()){
-                    var subFiles = fs.readdirSync(subPath);
-                    fs.mkdirSync(srcPath);
                     copyFile(subPath,srcPath);
                 }
             })
@@ -44,3 +48,6 @@ function copyFile(originPath,outputPath){
 
 copyFile(originPath,outputPath);
 
+Promise.all(taskArray).then(function(){
+    console.log("sfsdfsdf");
+});
