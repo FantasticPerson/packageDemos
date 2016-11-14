@@ -36,8 +36,10 @@ exports.winOld = function generateJson(needRefreshKey=false,needFlash=false,url=
     returnJson += "\t}\r\n";
     returnJson += "});\r\n";
 
-    returnJson += "app.commandLine.appendSwitch('ppapi-flash-path', __dirname + '/ppapi-flash-path/PepperFlash/pepflashplayer.dll');\r\n";
-    returnJson += "app.commandLine.appendSwitch('ppapi-flash-version', '17.0.0.169');\r\n";
+    if(needFlash) {
+        returnJson += "app.commandLine.appendSwitch('ppapi-flash-path', __dirname + '/ppapi-flash-path/PepperFlash/pepflashplayer.dll');\r\n";
+        returnJson += "app.commandLine.appendSwitch('ppapi-flash-version', '17.0.0.169');\r\n";
+    }
     returnJson += "app.commandLine.appendSwitch('disable-http-cache');\r\n";
 
     returnJson += "app.on('ready', function() {\r\n";
@@ -50,20 +52,22 @@ exports.winOld = function generateJson(needRefreshKey=false,needFlash=false,url=
     returnJson += "\t\t}\r\n";
     returnJson += "\t});\r\n";
 
-    returnJson += "\tmainWindow.loadUrl('http://192.168.2.7:8081/syxxybgcredit/company_toShouye.do');\r\n";
+    returnJson += "\tmainWindow.loadUrl('"+url+"');\r\n";
     returnJson += "\tmainWindow.maximize();\r\n";
     returnJson += "\tmainWindow.openDevTools();\r\n";
     returnJson += "\tmainWindow.on('closed', function() {\r\n";
     returnJson += "\t\tmainWindow = null;\r\n";
     returnJson += "\t});\r\n";
 
-    returnJson += "\tglobalShortcut.register('f5',function(){\r\n";
-    returnJson += "\t\tvar win = BrowserWindow.getFocusedWindow();\r\n";
-    returnJson += "\t\tif(win){\r\n";
-    returnJson += "\t\t\twin.reload();\r\n";
-    returnJson += "\t\t}\r\n";
-    returnJson += "\t});\r\n";
-    returnJson += "});\r\n";
+    if(needRefreshKey) {
+        returnJson += "\tglobalShortcut.register('f5',function(){\r\n";
+        returnJson += "\t\tvar win = BrowserWindow.getFocusedWindow();\r\n";
+        returnJson += "\t\tif(win){\r\n";
+        returnJson += "\t\t\twin.reload();\r\n";
+        returnJson += "\t\t}\r\n";
+        returnJson += "\t});\r\n";
+        returnJson += "});\r\n";
+    }
     returnJson += "app.commandLine.appendSwitch('--enable-npapi');\r\n";
 
     return returnJson;

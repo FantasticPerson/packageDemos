@@ -21,8 +21,8 @@ function createWindow() {
         pathname: path.join(__dirname, 'src/index.html'),
         protocol: 'file:',
         slashes: true
-    }))
-    mainWindow.webContents.openDevTools();
+    }));
+    //mainWindow.webContents.openDevTools();
     mainWindow.on('closed', function () {
         mainWindow = null;
     });

@@ -1,5 +1,7 @@
 .idea/
-node_modules/
-build/
-cache/
 .DS_Store
+node_modules/
+cache/
+build/
+output/
+Package.maker-win32-ia32/

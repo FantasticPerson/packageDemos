@@ -1,0 +1,13 @@
+{
+  "name": "win7",
+  "version": "1.0.0",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "build": "electron-packager . win7 --ignore=node_modules --platform=win32 --arch=ia32",
+    "package": "asar pack True.test-win32-x64/resources/app True.test-win32-x64/resources/app.asar && rm -rf True.test-win32-x64/resources/app"
+  },
+  "devDependencies": {
+    "electron-prebuilt": "0.31.2"
+  }
+}

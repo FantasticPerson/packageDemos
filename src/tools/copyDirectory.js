@@ -1,26 +1,37 @@
 /**
  * Created by dandan.wu on 2016/11/9.
  */
-exports.copyDirectory = function (srcDir,destDir,cb) {
+exports.copyDirectory = function (srcDir,destDir,pluginList,cb) {
     var fs = require('fs');
     var path = require('path');
     var rootPath = path.resolve(__dirname,'../../');
-    var outputPath = path.resolve(rootPath,destDir);
     var originPath = path.resolve(rootPath,srcDir);
-
+    var asar = require('original-fs-asar');
     var copyFolder = require('stream-copy-dir');
-    var handlebars = require('handlebars');
     var funcNum = 0;
-    var pathArray = [outputPath];
+    var pathArray = [destDir];
     var promiseTasks = [];
+    var pluginArray = ['PepperFlash','fingerPrint'];
+    var cleanPath = require('./cleanPath').cleanPath;
 
     function createPath() {
-        console.log(pathArray);
         for(var i = 0; i< pathArray.length;i++){
             if(!fs.existsSync(pathArray[i])){
                 fs.mkdirSync(pathArray[i]);
             }
         }
+    }
+
+    function filter(nameItem) {
+        if(pluginArray.indexOf(nameItem) >= 0){
+            if(pluginList.indexOf(pluginArray.indexOf(nameItem)) >= 0){
+                console.log(nameItem);
+                return true;
+            } else {
+                return false;
+            }
+        }
+        return true;
     }
 
     function copyDir(originPath,outputPath) {
@@ -46,39 +57,44 @@ exports.copyDirectory = function (srcDir,destDir,cb) {
                 files.map((nameItem)=>{
                     var srcPath = path.resolve(originPath, './' + nameItem);
                     var subPath = path.resolve(outputPath, './' + nameItem);
-                    if(nameItem != 'electron.asar'){
+                    if(nameItem != 'electron.asar' && nameItem != 'atom.asar'){
                         if (fs.statSync(srcPath).isDirectory()) {
-                            pathArray.push(subPath);
-                            funcNum++;
-                            copyFile(srcPath,subPath);
+                            if(filter(nameItem)) {
+                                pathArray.push(subPath);
+                                funcNum++;
+                                copyFile(srcPath, subPath);
+                            }
                         }
-                    } else {
-                        subPath = path.resolve(originPath, './' + 'electron.zip');
-                        promiseTasks[promiseTasks.length] = copyDir(srcPath,subPath);
                     }
                 });
-                funcNum--;
-                if(funcNum == 0){
-                    createPath();
-                    Promise.all(promiseTasks).then(function () {
-                        var electronZipPath = path.resolve(outputPath,'./resources/electron.zip');
-                        var electronZipPath2 = path.resolve(outputPath,'./resources/electron.asar');
-                        if(fs.existsSync(electronZipPath)){
-                            console.log("zipExist:"+fs.existsSync(electronZipPath));
-                            fs.rename(electronZipPath, electronZipPath2,function (err) {
-                                console.log(err);
-                                console.log("all finished");
-                                if(cb) {
-                                    cb(true);
-                                }
-                            });
-                        }
-                    });
-                }
             };
             copyFiles(files,originPath);
         }
+        funcNum--;
+        if(funcNum == 0){
+            createPath();
+            Promise.all(promiseTasks).then(function () {
+                var asarDestPath1 = path.resolve(outputPath,'./resources/electron');
+                var asarDestPath2 = path.resolve(outputPath,'./resources/atom');
+                var asarDestPath;
+                if(fs.existsSync(asarDestPath1+'.folder')) {
+                    asarDestPath = asarDestPath1;
+                } else if(fs.existsSync(asarDestPath2+'.folder')){
+                    asarDestPath = asarDestPath2;
+                }
+                if(asarDestPath){
+                    asar.createPackage(asarDestPath+'.folder',asarDestPath+'.asar',function () {
+                        cleanPath(asarDestPath+'.folder',function(){
+                            cb();
+                        });
+                    });
+                }
+                else {
+                    cb();
+                }
+            });
+        }
     }
     funcNum++;
-    copyFile(originPath,outputPath);
+    copyFile(originPath,destDir);
 };

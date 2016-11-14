@@ -3,27 +3,24 @@
  */
 var fs = require('fs');
 var path = require('path');
-var del = require('del');
-var rootpath = path.resolve(__dirname,'../../');
+var asar = require('original-fs-asar');
 var promiseNum = 0;
 
 exports.cleanPath = function cleanPath(path2,cb){
-    var mvSrc = path.resolve(rootpath,'./temp/resources/electron.asar');
-    var mvDest = path.resolve(rootpath,'./temp/resources/electron.zip');
     var promiseArray = [];
-    function renamesPromise(){
-        return new Promise((resolve)=>{
-            if(fs.existsSync(mvDest)) {
-                resolve();
-            }
-            fs.rename(mvSrc, mvDest,function(){
-                resolve();
-            })
-        });
+    var mvSrc1 = path.resolve(path2,'./resources/electron');
+    var mvSrc2 = path.resolve(path2,'./resources/atom');
+    var mvSrc;
+    if(fs.existsSync(mvSrc1+'.asar')){
+        mvSrc = mvSrc1;
+    } else if(fs.existsSync(mvSrc2+'.asar')){
+        mvSrc = mvSrc2;
     }
-    promiseArray[0] = renamesPromise();
+    if(mvSrc){
+        fs.renameSync((mvSrc+'.asar'), (mvSrc+'.zip'));
+    }
     function promiseRemove(path,isDir){
-        return new Promise(function(resolve,reject){
+        return new Promise(function(resolve){
             if(!fs.existsSync(path)){
                 resolve();
             }
@@ -32,13 +29,13 @@ exports.cleanPath = function cleanPath(path2,cb){
             resolve();
         })
     }
-    var outputpath = path.resolve(rootpath,'./'+path2);
-    var isExist = fs.existsSync(outputpath);
+    var isExist = fs.existsSync(path2);
     if(!isExist) {
         cb();
         return;
     }
-    fs.readdir(outputpath,function(err,files){
+    fs.readdir(path2,function(err,files){
+        console.log(path2);
         var rmDir = function(files,dir){
             files.map(function(nameItem){
                 var subPath = path.resolve(dir,'./'+nameItem);
@@ -59,12 +56,12 @@ exports.cleanPath = function cleanPath(path2,cb){
                     })
                     .catch(function (err){
                         console.log(err);
-                    })
+                    });
             }
         };
         if(files.length >= 0){
             promiseNum++;
-            rmDir(files,outputpath);
+            rmDir(files,path2);
         }
     });
 };

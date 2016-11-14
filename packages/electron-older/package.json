@@ -1,13 +1,17 @@
 {
-  "name": "test",
+  "name": "win7",
   "version": "1.0.0",
   "main": "main.js",
   "scripts": {
     "start": "electron .",
-    "build": "electron-packager . True.test --ignore=node_modules --platform=win32 --arch=ia32",
-    "package": "asar pack True.test-win32-x64/resources/app True.test-win32-x64/resources/app.asar && rm -rf True.test-win32-x64/resources/app"
+    "build": "electron-packager . win7 --ignore=node_modules --platform=win32 --arch=ia32",
+    "package": "asar pack win7-win32-ia32/resources/app win7-win32-ia32/resources/app.asar && rm -rf win7-win32-ia32/resources/app",
+    "unpack": "asar extract win7-win32-ia32/resources/atom.asar win7-win32-ia32/resources/atom.folder"
   },
   "devDependencies": {
     "electron-prebuilt": "0.31.2"
+  },
+  "dependencies": {
+    "asar": "^0.12.3"
   }
 }

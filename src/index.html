@@ -1,81 +1,104 @@
 <!DOCTYPE html>
 <html lang="en" xmlns="http://www.w3.org/1999/html">
-<head>
-    <meta charset="UTF-8">
-    <title>封装包生成器</title>
-    <style type="text/css">
-        #container{
-            width: 100%;
-            height: 100%;
-            display: flex;
-            flex-direction: row;
-            align-items: center;
-            justify-content: center;
-        }
-        .platform{
-            width: 500px;
-            height: 340px;
-        }
-    </style>
-</head>
-<body>
-    <div id="container">
-        <div class="innerContainer">
-            <div class="platform">
-                <h5>输入应用名称：</h5>
-                <input type="text" id="input_text_1"/>
-                <h5>选择平台：</h5>
-                <select name="select" id="select_k1" class="xla_k">
-                    <option value="win7+">win7+</option>
-                    <option value="xp">xp</option>
-                </select>
-                <h5>插件格式：</h5>
-                <select name="select" id="select_k2" class="xla_k">
-                    <option value="ppapi">ppapi</option>
-                    <option value="npapi">npapi</option>
-                </select>
-                <h5>选择插件(部分插件需要手动安装)：</h5>
-                <input type="checkbox" id="plugin_1" class="input_text">flash</input>
-                <input type="checkbox" id="plugin_2" class="input_text">fingerPrint</input>
-            </div>
-            <div class="generate">
-                <button id="generateBtn" onclick="generate()">生成</button>
-                <div id="progressInfo"></div>
+    <head>
+        <meta charset="UTF-8">
+        <title>封装包生成器</title>
+        <style type="text/css">
+            #container{
+                width: 100%;
+                height: 100%;
+                display: flex;
+                flex-direction: row;
+                align-items: center;
+                justify-content: center;
+            }
+            .platform{
+                width: 500px;
+                height: 270px;
+            }
+            h5{
+                margin: 5px;
+            }
+        </style>
+    </head>
+    <body>
+        <div id="container">
+            <div class="innerContainer">
+                <div class="platform">
+                    <h5>输入应用名称：</h5>
+                    <input type="text" id="input_text_1"/>
+                    <h5>输入URL：</h5>
+                    <input type="text" id="input_text_2"/>
+                    <h5>选择平台：</h5>
+                    <select name="select" id="select_k1" class="xla_k">
+                        <option value="win7+">win7+</option>
+                        <option value="xp">xp</option>
+                    </select>
+                    <h5>插件格式：</h5>
+                    <select name="select" id="select_k2" class="xla_k">
+                        <option value="ppapi">ppapi</option>
+                        <option value="npapi">npapi</option>
+                    </select>
+                    <h5>选择保存路径:</h5>
+                    <input type="text" id="pathSelected">
+                    <button onclick="getPath()">选择</button>
+                    <h5>选择插件(部分插件需要手动安装)：</h5>
+                    <input type="checkbox" id="plugin_1" class="input_text">flash</input>
+                    <input type="checkbox" id="plugin_2" class="input_text">fingerPrint</input>
+                </div>
+                <div class="generate">
+                    <button id="generateBtn" onclick="generate()">生成</button>
+                    <div id="progressInfo"></div>
+                </div>
             </div>
         </div>
-    </div>
-    <script>
-        function getPlatform(){
-            var select_k1 = document.getElementById('select_k1');
-            return select_k1.selectedIndex;
-        }
-        function getPluginType(){
-            var select_k2 = document.getElementById('select_k2');
-            return select_k2.selectedIndex;
-        }
-        function getPluginList(){
-            var list = [];
-            for(var i=0;i<2;i++){
-                var nodeItem = document.getElementById('plugin_'+(i+1));
-                if(nodeItem.checked){
-                    list.push(i);
-                }
+        <script>
+            var pathSelected;
+            function getPath(){
+                var select_k1 = document.getElementById('pathSelected');
+                const {dialog} = require('electron').remote;
+                dialog.showOpenDialog({properties: ['openDirectory']},function(path){
+                    pathSelected = select_k1.value = path[0];
+                    console.log(path)
+                });
             }
-            return list;
-        }
-        function getAppName(){
-            var node = document.getElementById('input_text_1');
-            return node.value;
-        }
-        function generate(){
-            var platformIndex = getPlatform();
-            var pluginType = getPluginType();
-            var pluginList = getPluginList();
-            var appName = getAppName();
+            function getPlatform(){
+                var select_k1 = document.getElementById('select_k1');
+                return select_k1.selectedIndex;
+            }
+            function getPluginType(){
+                var select_k2 = document.getElementById('select_k2');
+                return select_k2.selectedIndex;
+            }
+            function getPluginList(){
+                var list = [];
+                for(var i=0;i<2;i++){
+                    var nodeItem = document.getElementById('plugin_'+(i+1));
+                    if(nodeItem.checked){
+                        list.push(i);
+                    }
+                }
+                return list;
+            }
+            function getUrl() {
+                var node = document.getElementById('input_text_2');
+                return node.value;
+            }
+            function getAppName(){
+                var node = document.getElementById('input_text_1');
+                return node.value;
+            }
+            function generate(){
+                var platformIndex = getPlatform();
+                var pluginType = getPluginType();
+                var pluginList = getPluginList();
+                var appName = getAppName();
+                var url = getUrl();
 
-            var tt = require('./index').generatePackage;
-            tt();
-        }
-    </script>
-</body>
+                var generatePackage = require('./index').generatePackage;
+                console.log(platformIndex,pluginType,pluginList,appName);
+                generatePackage(platformIndex,pluginType,pluginList,appName,url,pathSelected);
+            }
+        </script>
+    </body>
 </html>
