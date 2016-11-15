@@ -15,14 +15,8 @@
     "electron-prebuilt": "1.4.4"
   },
   "dependencies": {
-    "asar": "^0.12.3",
-    "del": "^2.2.2",
     "easy-zip-archiver": "^0.0.3",
-    "electron-safe-ipc": "^0.6.1",
-    "handlebars": "^4.0.5",
     "original-fs-asar": "^0.12.7",
-    "stream-copy-dir": "^1.0.0",
-    "tar": "^2.2.1",
-    "zip-archiver": "^0.0.4"
+    "stream-copy-dir": "^1.0.0"
   }
 }

@@ -3,52 +3,156 @@
     <head>
         <meta charset="UTF-8">
         <title>封装包生成器</title>
+        <link rel="stylesheet" href="assets/css/bootstrap.min.css">
+        <script src="assets/js/jquery-3.1.1.min.js"></script>
+        <script src="assets/js/bootstrap.min.js"></script>
         <style type="text/css">
             #container{
+                position: absolute;
                 width: 100%;
                 height: 100%;
                 display: flex;
-                flex-direction: row;
+                flex-direction: column;
                 align-items: center;
-                justify-content: center;
             }
             .platform{
-                width: 500px;
-                height: 270px;
+                width: 600px;
+                height: 400px;
+                padding: 10px;
+                border: 2px solid #cccccc;
+                margin: 20px;
+                margin-right: auto;
+                margin-left: auto;
             }
             h5{
                 margin: 5px;
+            }
+            body{
+                margin: 0;
+            }
+            .headerContainer{
+                background-image: url(assets/fcb3879e14429d75833a461572e64.jpg);
+                background-repeat: no-repeat;
+                background-position: center 20%;
+                -webkit-background-size: cover;
+                background-size: cover;
+                width: 100%;
+                height: 20%;
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+            }
+            .titleName{
+                font-size: 40px;
+                color: #FFFFFF;
+                width: 250px;
+                font-weight: bolder;
+            }
+            .innerContainer{
+                width: 100%;
+                height: 80%;
+                background-color: #eeeeee;
+            }
+            .myCheckBox{
+                background-color: #FFFFFF;
+                color: #555555;
+                background-image: none;
+                border:1px solid #cccccc;
+                border-radius: 4px;
+                width: 20px;
+                height: 20px;
+            }
+            .checkBox-text{
+                display: inline;
+                color: #555;
+                font-size: 20px;
+            }
+            .mySelect{
+                width: 90px;
+                margin-top: 18px;
+            }
+            h2{
+                width: 300px;
+            }
+            .myInputText{
+                width: 200px;
+                margin-top: 18px;
+            }
+            .inputContainer{
+                display: flex;
+                flex-direction: row;
+            }
+            .pathSelectbtn{
+                height: 40px;
+                margin-top: 14px;
+                margin-left: 4px;
+            }
+            .pluginCheckBoxContainer{
+                margin-top: 22px;
+            }
+            .generate{
+                display: flex;
+                flex-direction: row-reverse;
+                padding-right: 100px;
+            }
+            #progressInfo{
+                width: 200px;
+                font-size: 20px;
+                margin-top: 8px;
+                color: #555;
             }
         </style>
     </head>
     <body>
         <div id="container">
+            <div class="headerContainer">
+                <div class="titleName">封装包生成器</div>
+            </div>
             <div class="innerContainer">
-                <div class="platform">
-                    <h5>输入应用名称：</h5>
-                    <input type="text" id="input_text_1"/>
-                    <h5>输入URL：</h5>
-                    <input type="text" id="input_text_2"/>
-                    <h5>选择平台：</h5>
-                    <select name="select" id="select_k1" class="xla_k">
-                        <option value="win7+">win7+</option>
-                        <option value="xp">xp</option>
-                    </select>
-                    <h5>插件格式：</h5>
-                    <select name="select" id="select_k2" class="xla_k">
-                        <option value="ppapi">ppapi</option>
-                        <option value="npapi">npapi</option>
-                    </select>
-                    <h5>选择保存路径:</h5>
-                    <input type="text" id="pathSelected">
-                    <button onclick="getPath()">选择</button>
-                    <h5>选择插件(部分插件需要手动安装)：</h5>
-                    <input type="checkbox" id="plugin_1" class="input_text">flash</input>
-                    <input type="checkbox" id="plugin_2" class="input_text">fingerPrint</input>
-                </div>
-                <div class="generate">
-                    <button id="generateBtn" onclick="generate()">生成</button>
-                    <div id="progressInfo"></div>
+                <div class="platformContainer">
+                    <div class="platform">
+                        <div class="inputContainer">
+                            <h2>1、输入应用名称：</h2>
+                            <input type="text" class="form-control myInputText" id="input_text_1"/>
+                        </div>
+                        <div class="inputContainer">
+                            <h2>2、输入URL：</h2>
+                            <input type="text" class="form-control myInputText" id="input_text_2"/>
+                        </div>
+                        <div  class="inputContainer">
+                            <h2>3、选择平台：</h2>
+                            <select name="select" class="form-control mySelect" id="select_k1" class="xla_k">
+                                <option value="win7+">win7+</option>
+                                <option value="xp">xp</option>
+                            </select>
+                        </div>
+                        <div  class="inputContainer">
+                            <h2>4、插件格式：</h2>
+                            <select name="select" class="form-control mySelect" id="select_k2" class="xla_k">
+                                <option value="ppapi">ppapi</option>
+                                <option value="npapi">npapi</option>
+                            </select>
+                        </div>
+                        <div class="inputContainer">
+                            <h2>5、选择保存路径:</h2>
+                            <input type="text" class="form-control  myInputText" id="pathSelected">
+                            <button onclick="getPath()" class="btn btn-default btn-lg pathSelectbtn">选择</button>
+                        </div>
+                        <div class="inputContainer">
+                            <h2>6、选择插件：</h2>
+                            <div class="pluginCheckBoxContainer">
+                                <input type="checkbox" id="plugin_1" class="input_text myCheckBox"/>
+                                <div class="checkBox-text">flash</div>
+                                <input type="checkbox" id="plugin_2" class="input_text myCheckBox"/>
+                                <div class="checkBox-text">fingerPrint</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="generate">
+                        <button id="generateBtn" class="btn btn-primary btn-lg" onclick="generate()">生成</button>
+                        <div id="progressInfo"></div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -96,7 +200,10 @@
                 var url = getUrl();
 
                 var generatePackage = require('./index').generatePackage;
-                console.log(platformIndex,pluginType,pluginList,appName);
+                if(!url || !appName || !pathSelected){
+                    alert("信息填写不完整");
+                    return;
+                }
                 generatePackage(platformIndex,pluginType,pluginList,appName,url,pathSelected);
             }
         </script>

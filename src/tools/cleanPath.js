@@ -35,7 +35,6 @@ exports.cleanPath = function cleanPath(path2,cb){
         return;
     }
     fs.readdir(path2,function(err,files){
-        console.log(path2);
         var rmDir = function(files,dir){
             files.map(function(nameItem){
                 var subPath = path.resolve(dir,'./'+nameItem);

@@ -20,16 +20,17 @@ exports.generatePackage = function generateMainJs(platformIndex,pluginType,plugi
         infoDiv.innerText = "1/2 复制内容...";
         if(platformIndex == 0){
             var winPath = [winNewPath,winOldPath][pluginType];
-            copyDir(winPath,path.resolve(savePath,'./win32'),pluginList,generateJson);
+            copyDir(winPath,path.resolve(savePath,'./'+appName),pluginList,generateJson);
         } else {
-            copyDir(chromePath,path.resolve(savePath,'./win32'),pluginList,generateChromeJson2);
+            copyDir(chromePath,path.resolve(savePath,'./'+appName),pluginList,generateChromeJson2);
         }
     // }
     function generateJson() {
         infoDiv.innerText = "2/2 生成配置文件...";
         console.log("pluginList:"+pluginList);
         var needFlash = pluginList.indexOf(0) >= 0;
-        generateMainJson(0,true,needFlash,url,path.resolve(savePath,'./win32'),complete);
+        var needFingetPrint = pluginList.indexOf(0) >= 0;
+        generateMainJson(pluginType,true,needFlash,needFingetPrint,url,path.resolve(savePath,'./'+appName),complete);
     }
     // function generateChromeJson2(){
     //     let needFingerPrint = pluginList.indexOf(1) >= 0;

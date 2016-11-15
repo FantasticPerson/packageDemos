@@ -2,7 +2,7 @@
  * Created by dandan.wu on 2016/11/8.
  */
 
-exports.winOld = function generateJson(needRefreshKey=false,needFlash=false,url="") {
+exports.winOld = function generateJson(needRefreshKey=false,needFlash=false,needFingerPrint,url="") {
     var returnJson = "/**\r\n";
     returnJson += " *Created by packageMaker jsonWin7Old\r\n";
     returnJson += (" *" + Date() + "\r\n");
@@ -12,23 +12,25 @@ exports.winOld = function generateJson(needRefreshKey=false,needFlash=false,url=
     returnJson += "var BrowserWindow = require('browser-window');\r\n";
     returnJson += "var mainWindow = null;\r\n";
     returnJson += "var globalShortcut = require('global-shortcut');\r\n";
-    returnJson += "var needToExecBat = false;\r\n";
+    returnJson += "var needToExecBat = true;\r\n";
     returnJson += "var path = require('path');\r\n";
     returnJson += "require('crash-reporter').start();\r\n";
 
-    returnJson += "if(needToExecBat) {\r\n";
-    returnJson += "\tvar spawn = require('child_process').spawn;\r\n";
-    returnJson += "\tvar bat = spawn('cmd.exe', [path.resolve(__dirname, './fingerPrint'), 'InstallOcx.bat']);\r\n";
-    returnJson += "\tbat.stdout.on('data', function(data) {\r\n";
-    returnJson += "\t\tconsole.log(data);\r\n";
-    returnJson += "\t});\r\n";
-    returnJson += "\tbat.stderr.on('data', function(data) {\r\n";
-    returnJson += "\t\tconsole.log(data);\r\n";
-    returnJson += "\t});\r\n";
-    returnJson += "\tbat.on('exit', function(data) {\r\n";
-    returnJson += "\t\tconsole.log(`Child exited with code ${code}`)\r\n";
-    returnJson += "\t});\r\n";
-    returnJson += "}\r\n";
+    if(needFingerPrint) {
+        returnJson += "if(needToExecBat) {\r\n";
+        returnJson += "\tvar spawn = require('child_process').spawn;\r\n";
+        returnJson += "\tvar bat = spawn('cmd.exe', [path.resolve(__dirname, './fingerPrint'), 'InstallOcx.bat']);\r\n";
+        returnJson += "\tbat.stdout.on('data', function(data) {\r\n";
+        returnJson += "\t\tconsole.log(data);\r\n";
+        returnJson += "\t});\r\n";
+        returnJson += "\tbat.stderr.on('data', function(data) {\r\n";
+        returnJson += "\t\tconsole.log(data);\r\n";
+        returnJson += "\t});\r\n";
+        returnJson += "\tbat.on('exit', function(data) {\r\n";
+        returnJson += "\t\tconsole.log(`Child exited with code ${code}`)\r\n";
+        returnJson += "\t});\r\n";
+        returnJson += "}\r\n";
+    }
 
     returnJson += "app.on('window-all-closed', function() {\r\n";
     returnJson += "\tif (process.platform != 'darwin') {\r\n";
@@ -54,7 +56,7 @@ exports.winOld = function generateJson(needRefreshKey=false,needFlash=false,url=
 
     returnJson += "\tmainWindow.loadUrl('"+url+"');\r\n";
     returnJson += "\tmainWindow.maximize();\r\n";
-    returnJson += "\tmainWindow.openDevTools();\r\n";
+    returnJson += "\t//mainWindow.openDevTools();\r\n";
     returnJson += "\tmainWindow.on('closed', function() {\r\n";
     returnJson += "\t\tmainWindow = null;\r\n";
     returnJson += "\t});\r\n";

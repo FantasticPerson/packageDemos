@@ -9,13 +9,15 @@ let mainWindow;
 
 function createWindow() {
     // const {width, height} = electron.screen.getPrimaryDisplay().workAreaSize;
-    var width = 800;
-    var height = 600;
+    var width = 1220;
+    var height = 730;
     mainWindow = new BrowserWindow({
         width, height, webPreferences: {
             nodeIntegration: true,
             plugins: true
-        }
+        },
+        maximizable:false,
+        resizable:false
     });
     mainWindow.loadURL(url.format({
         pathname: path.join(__dirname, 'src/index.html'),

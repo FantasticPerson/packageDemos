@@ -1,7 +1,7 @@
 /**
  * Created by dandan.wu on 2016/11/8.
  */
-exports.winNew =  function getMainJson(needRefreshKey=false,needFlash=false,url=""){
+exports.winNew =  function getMainJson(needRefreshKey=false,needFlash=false,needFingerPrint,url=""){
     var returnJson = "/**\r\n";
     returnJson += " *Created by packageMaker jsonWin7New\r\n";
     returnJson += (" *"+Date()+"\r\n");
@@ -24,7 +24,7 @@ exports.winNew =  function getMainJson(needRefreshKey=false,needFlash=false,url=
     returnJson += "\t\t}\r\n";
     returnJson += "\t});\r\n";
     returnJson += "\tmainWindow.loadURL('"+url+"');\r\n";
-    returnJson += "\tmainWindow.webContents.openDevTools();\r\r";
+    returnJson += "\t//mainWindow.webContents.openDevTools();\r\r";
     returnJson += "\tmainWindow.on('closed', function () {\r\n";
     returnJson += "\t\tmainWindow = null;\r\n";
     returnJson += "\t});\r\n";
